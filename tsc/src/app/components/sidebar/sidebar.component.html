@@ -1,0 +1,78 @@
+<div>
+  <!-- Overlay for mobile when sidebar is open -->
+  <div *ngIf="!isCollapsed" (click)="toggleSidebar()" class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"></div>
+
+  <div id="sidebar"
+      [class.sidebar-collapse]="isCollapsed"
+      [class.sidebar-expand]="!isCollapsed"
+      class="fixed inset-y-0 left-0 w-64 bg-gradient-to-b from-amber-900 to-amber-800 text-white flex flex-col z-50 transform transition-transform duration-300 md:relative md:translate-x-0">
+      <div class="p-4 flex items-center space-x-3 border-b border-amber-700 hidden-mobile md:flex">
+          <div class="w-10 h-10 rounded-full bg-amber-600 flex items-center justify-center">
+              <i class="fas fa-mug-hot text-xl"></i>
+          </div>
+          <h1 class="text-xl font-bold">Brew & Bites</h1>
+      </div>
+
+      <!-- Sidebar toggle button for small screens -->
+      <div class="p-4 border-b border-amber-700 md:hidden flex items-center justify-between">
+          <button (click)="toggleSidebar()" class="text-white focus:outline-none">
+              <i class="fas fa-bars text-xl"></i>
+          </button>
+          <h1 class="text-xl font-bold">Brew & Bites</h1>
+      </div>
+
+    <div class="p-4 space-y-6 flex-1 overflow-y-auto">
+        <div>
+            <h2 class="text-xs uppercase tracking-wider text-amber-300 mb-2">Tables</h2>
+            <div class="grid grid-cols-3 gap-2" id="tables-container">
+                <ng-container *ngFor="let table of tableProperties">
+                    <button class="table-btn bg-amber-700 hover:bg-amber-600 rounded-md p-2 text-sm"
+                        [ngClass]="table.tableId == commonService.selectedTable.tableId ? 'active-table' : ''"
+                        [attr.data-table]="table.tableId" (click)=changeTable(table)>{{ table.name }}
+                    </button>
+                </ng-container>
+            </div>
+        </div>
+
+        <div>
+            <h2 class="text-xs uppercase tracking-wider text-amber-300 mb-2">Categories</h2>
+            <div class="space-y-1" id="categories-container">
+                <ng-container *ngFor="let category of footCategories">
+                    <button
+                        class="category-btn w-full text-left px-3 py-2 rounded-md hover:bg-amber-700 text-sm flex items-center space-x-2"
+                        [ngClass]="category.id == commonService.selectedCategory.id ? 'active-category' : ''"
+                        [attr.data-table]="category.displayName" (click)=changeCategory(category)>
+                        <i class="fas w-4" [ngClass]="category.icon"></i>
+                        <span>{{ category.displayName }}</span>
+                    </button>
+                </ng-container>
+            </div>
+        </div>
+
+        <div>
+            <h2 class="text-xs uppercase tracking-wider text-amber-300 mb-2">Quick Actions</h2>
+            <div class="space-y-1" id="quick-actions-container">
+                <ng-container *ngFor="let action of quickActions">
+                    <button
+                        class="action-btn w-full text-left px-3 py-2 rounded-md hover:bg-amber-700 text-sm flex items-center space-x-2"
+                        [attr.data-action]="action.action">
+                        <i class="fas w-4" [ngClass]="action.icon"></i>
+                        <span>{{ action.action }}</span>
+                    </button>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-4 border-t border-amber-700 hidden-mobile md:block">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-full bg-amber-600 flex items-center justify-center">
+                <i class="fas fa-user text-sm"></i>
+            </div>
+            <div>
+                <p class="text-sm font-medium">{{ commonService.selectedCasier?.name }}</p>
+                <p class="text-xs text-amber-300">Cashier</p>
+            </div>
+        </div>
+    </div>
+</div>
