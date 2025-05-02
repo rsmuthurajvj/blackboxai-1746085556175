@@ -8,7 +8,7 @@
         <div>
             <div class="flex items-center space-x-4">
                 <h2 class="text-xl font-bold text-gray-800" id="current-table">{{ commonService.selectedTable.name }} - Order #{{ commonService.currentOrderNumber }}</h2>
-                <span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full" id="active-orders-count">1 active</span>
+                <!-- <span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full" id="active-orders-count">1 active</span> -->
             </div>
             <p class="text-sm text-gray-500" id="order-summary">{{ commonService.selectedItems?.length }} items | ₹{{ commonService.totalPriceAmount }}</p>
         </div>
@@ -45,8 +45,7 @@
         <!-- Menu Items View -->
         <div class="w-full md:w-2/3 p-4 md:p-6 overflow-y-auto" id="menu-view" style="max-height: calc(100vh - 120px);">
             <!-- Order Tabs -->
-            <div class="mb-4 border-b flex order-tabs" id="order-tabs-container">
-                <!-- Order tabs will be dynamically generated -->
+            <!-- <div class="mb-4 border-b flex order-tabs" id="order-tabs-container">
                 <div *ngFor="let order of activeOrders | keyvalue" class="order-tab-container">
                     <button 
                         class="order-tab px-4 py-2 text-sm" 
@@ -55,7 +54,7 @@
                         Table {{ order.value.table }} ({{ order.value.items.length }} items)
                     </button>
                 </div>
-            </div>
+            </div> -->
             
             <!-- Tea & Coffee Category (default view) -->
             <div class="mb-6" id="tea-coffee-view">
