@@ -1,0 +1,169 @@
+<div [class.sidebar-collapsed]="sidebarCollapsed" class="flex-1 flex flex-col overflow-hidden w-full-mobile">
+    <!-- Sidebar toggle button fixed on top left for mobile when sidebar is collapsed -->
+    <button *ngIf="sidebarCollapsed" (click)="commonService.setSidebarCollapsed(false)" class="fixed top-4 left-4 z-50 p-2 bg-amber-600 text-white rounded-md md:hidden" style="z-index: 1000;">
+        <i class="fas fa-bars"></i>
+    </button>
+    <!-- Top Bar -->
+    <div class="bg-white border-b flex items-center justify-between p-4" [class.pl-12]="sidebarCollapsed && isMobile()">
+        <div>
+            <div class="flex items-center space-x-4">
+                <h2 class="text-xl font-bold text-gray-800" id="current-table">{{ commonService.selectedTable.name }} - Order #{{ commonService.currentOrderNumber }}</h2>
+                <span class="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full" id="active-orders-count">1 active</span>
+            </div>
+            <p class="text-sm text-gray-500" id="order-summary">{{ commonService.selectedItems?.length }} items | ₹{{ commonService.totalPriceAmount }}</p>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+            <div class="relative" id="search-container">
+                <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm flex items-center space-x-2" id="search-btn">
+                    <i class="fas fa-search"></i>
+                    <span class="hidden-mobile md:inline">Search Items</span>
+                </button>
+                <div class="absolute right-0 mt-2 w-80 md:w-96 bg-white shadow-lg rounded-md z-10 hidden" id="search-dropdown">
+                    <div class="p-3 border-b">
+                        <input type="text" placeholder="Search menu items..." class="w-full p-2 border rounded-md focus:ring-amber-500 focus:border-amber-500" id="search-input">
+                    </div>
+                    <div class="max-h-96 overflow-y-auto" id="search-results">
+                        <!-- Search results will appear here -->
+                    </div>
+                </div>
+            </div>
+            <button class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-sm flex items-center space-x-2 hidden-mobile md:flex">
+                <i class="fas fa-print"></i>
+                <span>Print Bill</span>
+            </button>
+            <button class="md:hidden px-3 py-1 bg-amber-600 text-white rounded-md">
+                <i class="fas fa-print"></i>
+            </button>
+            <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center hidden-mobile md:flex">
+                <i class="fas fa-bell text-gray-600"></i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="flex-1 flex flex-col md:flex-row overflow-hidden flex-col-mobile h-auto-mobile">
+        <!-- Menu Items View -->
+        <div class="w-full md:w-2/3 p-4 md:p-6 overflow-y-auto" id="menu-view" style="max-height: calc(100vh - 120px);">
+            <!-- Order Tabs -->
+            <div class="mb-4 border-b flex order-tabs" id="order-tabs-container">
+                <!-- Order tabs will be dynamically generated -->
+                <div *ngFor="let order of activeOrders | keyvalue" class="order-tab-container">
+                    <button 
+                        class="order-tab px-4 py-2 text-sm" 
+                        [ngClass]="{'active-order-tab': order.key === currentOrderId, 'text-gray-600': order.key !== currentOrderId}" 
+                        (click)="selectOrder(order.key)">
+                        Table {{ order.value.table }} ({{ order.value.items.length }} items)
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Tea & Coffee Category (default view) -->
+            <div class="mb-6" id="tea-coffee-view">
+                <h3 class="text-lg font-semibold mb-3 text-gray-700">Tea & Coffee</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    <!-- Loop through menu items -->
+                    <div *ngFor="let item of commonService.selectedCategory.menuItems" class="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow menu-item relative">
+                        <div class="h-32 bg-amber-100 flex items-center justify-center">
+                            <i class="fas {{item.icon}} text-4xl text-amber-600"></i>
+                        </div>
+                        <div class="p-3">
+                            <h4 class="font-medium">{{item.name}}</h4>
+                            <p class="text-sm text-gray-500 mb-2">{{item.description}}</p>
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold">₹{{item.price}}</span>
+                                <button class="add-to-order w-8 h-8 rounded-full bg-amber-600 text-white flex items-center justify-center hover:bg-amber-700" [attr.data-name]="item.name" [attr.data-price]="item.price">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="item-overlay absolute inset-0 bg-black bg-opacity-30 opacity-0 transition-opacity flex items-center justify-center">
+                            <button (click)="addToOrder(item)" class="px-4 py-2 bg-white rounded-md text-amber-800 font-medium add-to-order" [attr.data-name]="item.name" [attr.data-price]="item.price">
+                                Add to Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Other categories and views omitted for brevity -->
+        </div>
+        
+        <!-- Order Summary (Right Side Nav) -->
+        <div class="w-full md:w-1/3 bg-white border-t md:border-t-0 md:border-l p-4 md:p-6 flex flex-col overflow-y-auto" id="order-summary-view" style="max-height: calc(100vh - 120px);">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-semibold">Current Order</h3>
+                <div class="flex space-x-2">
+                    <button class="text-gray-500 hover:text-gray-700 text-sm flex items-center space-x-1" id="transfer-order">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span class="hidden-mobile md:inline">Transfer</span>
+                    </button>
+                    <button (click)="clearOrder()" class="text-red-500 hover:text-red-700 text-sm flex items-center space-x-1" id="clear-order">
+                        <i class="fas fa-trash-alt"></i>
+                        <span class="hidden-mobile md:inline">Clear</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto mb-4" id="order-items-container" style="max-height: 200px;">
+                <ng-container *ngFor="let item of commonService.selectedItems; let i = index;">
+                    <div class="flex justify-between items-center py-3 border-b receipt-item">
+                        <div>
+                            <h4 class="font-medium">{{item.name}}</h4>
+                            <div class="flex items-center space-x-2 mt-1">
+                                <button (click)="decreaseQuantity(item)" class="decrease-qty w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300">
+                                    <i class="fas fa-minus text-xs"></i>
+                                </button>
+                                <span class="quantity text-sm">{{item.quantity}}</span>
+                                <button (click)="increaseQuantity(item)" class="increase-qty w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300">
+                                    <i class="fas fa-plus text-xs"></i>
+                                </button>
+                                <span class="text-sm text-gray-500">× ₹{{item.price}}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span class="item-total font-medium">₹{{item.price * item.quantity}}</span>
+                            <button (click)="removeOrder(i)" class="remove-item text-red-500 hover:text-red-700">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+            
+            
+            <div class="bg-gray-50 p-4 rounded-lg mb-4" id="order-totals">
+                <div class="flex justify-between py-2">
+                    <span class="text-gray-600">Subtotal</span>
+                    <span class="font-medium" id="subtotal">₹{{ commonService.totalPriceAmount }}</span>
+                </div>
+                <div class="flex justify-between py-2">
+                    <span class="text-gray-600">Tax (5%)</span>
+                    <span class="font-medium" id="tax">₹{{ (commonService.totalPriceAmount * 0.05).toFixed(2) }}</span>
+                </div>
+                <div class="flex justify-between py-2 border-t border-gray-200">
+                    <span class="text-gray-600">Discount</span>
+                    <div class="flex items-center space-x-2">
+                        <button class="text-xs text-amber-600" id="decrease-discount">-</button>
+                        <input type="number" class="w-16 text-center border rounded-md text-green-600 font-medium" id="discount" value="0" min="0" step="1">
+                        <button class="text-xs text-amber-600" id="increase-discount">+</button>
+                    </div>
+                </div>
+                <div class="flex justify-between py-2 font-bold text-lg">
+                    <span>Total</span>
+                    <span id="total">₹0.00</span>
+                </div>
+            </div>
+            
+            <div class="space-y-2">
+                <button class="w-full py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-md font-medium flex items-center justify-center space-x-2" id="submit-order">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Submit Order</span>
+                </button>
+                <button class="w-full py-3 bg-white border border-amber-600 text-amber-600 hover:bg-amber-50 rounded-md font-medium flex items-center justify-center space-x-2" id="payment-btn">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Payment</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
