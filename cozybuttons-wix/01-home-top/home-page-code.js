@@ -47,6 +47,16 @@ const SETTINGS = {
   ],
 
   productsPerTab: 12,
+
+  // ---- Lower block (#cozyHomeMore) ----
+  ages: [
+    { label: '0–3 Month',  short: '0–3 M',  collection: '0-3 Month' },
+    { label: '3–6 Month',  short: '3–6 M',  collection: '3-6 Month' },
+    { label: '6–12 Month', short: '6–12 M', collection: '6-12 Month' },
+    { label: '1–2 Year',   short: '1–2 Y',  collection: '1-2 Year' },
+    { label: '2–3 Years',  short: '2–3 Y',  collection: '2-3 Years' },
+  ],
+  kit: { nameContains: 'Starter Kit', collection: 'Kids Combo Pack' },
 };
 
 // ---------------------------------------------------------------------
@@ -190,31 +200,51 @@ async function buildData() {
   };
 }
 
-$w.onReady(function () {
-  console.log('[CozyButtons] page code started');
-  const frame = $w(FRAME);
-  const dataPromise = buildData().catch(err => { console.error('[CozyButtons] load failed', err); return null; });
-  // Send as soon as ready (in case the embed loaded first), and again when the embed says "ready".
-  dataPromise.then(data => {
-    if (!data) return;
-    console.log('[CozyButtons] data ready:', data.tabs.map(t => `${t.label}=${t.items.length}`).join(', '),
-      '| categories with photo:', data.cats.filter(c => c.img).length);
-    frame.postMessage(data);
-  });
+async function findKit() {
+  const k = SETTINGS.kit;
+  try {
+    const res = await wixData.query('Stores/Products').contains('name', k.nameContains).limit(5).find();
+    if (res.items.length) return toCard(res.items[0]);
+  } catch (e) {
+    console.warn('[CozyButtons] kit name search not allowed, using category', e);
+  }
+  const list = await products(k.collection, 10);
+  return list.find(p => p.name.toLowerCase().includes(k.nameContains.toLowerCase())) || list[0] || null;
+}
+
+async function buildMore() {
+  const ages = await Promise.all(SETTINGS.ages.map(async a => {
+    const first = await products(a.collection, 1);
+    return { label: a.label, short: a.short, url: await categoryUrl(a.collection), img: first[0] ? imageUrl(first[0].media, 300, 300) : '' };
+  }));
+  const kit = await findKit();
+  if (kit) kit.img = imageUrl(kit.media, 640, 800);
+  console.log('[CozyButtons] lower block ready: ages with photo', ages.filter(a => a.img).length, '| kit:', kit ? kit.name : 'not found');
+  return { type: 'data', ages, kit };
+}
+
+// Connects one Embed HTML element to its data. Skips quietly if the element is not on the page.
+function connect(id, build) {
+  let frame;
+  try {
+    frame = $w(id);
+    if (!frame || typeof frame.onMessage !== 'function') throw new Error('missing');
+  } catch (e) {
+    console.log(`[CozyButtons] ${id} not on this page, skipped`);
+    return;
+  }
+  const dataPromise = build().catch(err => { console.error(`[CozyButtons] ${id} load failed`, err); return null; });
+  dataPromise.then(data => { if (data) frame.postMessage(data); });
 
   frame.onMessage(async (event) => {
     const msg = event.data || {};
-
     if (msg.type === 'ready') {
-      console.log('[CozyButtons] embed is ready');
       const data = await dataPromise;
       if (data) frame.postMessage(data);
     }
-
     if (msg.type === 'go' && msg.url) {
       wixLocation.to(msg.url);
     }
-
     if (msg.type === 'add' && msg.productId) {
       try {
         await cart.addProducts([{ productId: msg.productId, quantity: 1 }]);
@@ -225,4 +255,15 @@ $w.onReady(function () {
       }
     }
   });
+}
+
+$w.onReady(function () {
+  console.log('[CozyButtons] page code started');
+  connect(FRAME, async () => {
+    const data = await buildData();
+    console.log('[CozyButtons] data ready:', data.tabs.map(t => `${t.label}=${t.items.length}`).join(', '),
+      '| categories with photo:', data.cats.filter(c => c.img).length);
+    return data;
+  });
+  connect('#cozyHomeMore', buildMore);
 });

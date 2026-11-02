@@ -9,7 +9,7 @@ Redesign of the cozybuttons.com homepage. It stays in **Wix**, and the store, ca
 | Step | Folder | Status |
 |---|---|---|
 | 1. Hero + category buttons + product tabs | `01-home-top/` | **done** (installed in Cozy Button Revamp, tested desktop + mobile) |
-| 2. Combo-pack builder, festive banner, trust badges, Instagram strip | `02-…` | next |
+| 2. Offer ribbon, shop by age + size finder, starter kit, made in Karur, FAQ, WhatsApp help | `02-home-more/` | ready to install |
 | 3. Header / menu / footer restyle (native Wix settings) | `03-…` | later |
 
 Design reference (prototype): https://claude.ai/artifact/UdoDoEfYGFMtTtYdeGtNB5
@@ -92,3 +92,21 @@ Don't connect the domain or move the Premium plan to this copy.
 - Products with options (size, colour) can't be added without choosing one, so **Choose size** opens the product page.
 - Text inside an Embed HTML element isn't indexed by Google. The product and category pages stay native, so product SEO is unaffected. Set the Home page SEO title and description in **Page Settings → SEO basics**.
 - Measured content height of the embed: 1364px at 980 wide and about 1475px at 280–320 wide (compact mobile layout). The sizes above add a small margin. If you change the text, re-check the height so nothing is cut off.
+
+---
+
+## Step 2 – install the lower block
+
+Files: `02-home-more/embed.html` (design) and the **updated** `01-home-top/home-page-code.js` (now feeds both blocks).
+
+1. **Page code:** Page Code → Home → `Ctrl+A` → paste the new `home-page-code.js` → Save. It still runs block 1 exactly as before.
+2. **Make room (desktop view):** select `section1`, drag its purple ↕ handle down about **2,500 px** (or add a new blank section below it: hover the section's bottom edge → **+ Add Section** → Blank).
+3. **Add a second Embed HTML** (Add → Embed Code → Embed HTML), place it under the first block. **Enter Code → Code** → paste all of `02-home-more/embed.html` → **Update**.
+4. **ID:** `cozyHomeMore`.
+5. **Size (desktop):** **W 980, X 0, H 2450**. Section height = block bottom + about 30.
+6. **Mobile view:** select the block → **W 320, X 0, H 3180**, and make its section tall enough so the footer starts below it. If the content is taller than the box, it shrinks slightly to fit (no inner scrollbar); if there's a gap, lower H by 50.
+7. **Save → fresh Test Site → Ctrl+Shift+R.** Console (filter `CozyButtons`) should show `lower block ready: ages with photo 5 | kit: New Born Starter Kit`.
+
+Check: age circles show photos and open the age pages · the slider changes the recommendation and highlights a circle · the kit shows the real price, **Add kit to cart** raises the cart count · FAQ opens/closes · WhatsApp opens a chat.
+
+Text to confirm with the client is in the `CONTENT` block at the top of the `<script>` in `02-home-more/embed.html` (lines marked `CONFIRM`): free-shipping amount, 12 PM cut-off, no-COD wording, kit contents, story wording.
