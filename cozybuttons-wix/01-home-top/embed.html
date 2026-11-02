@@ -219,7 +219,7 @@ function renderRail(){
     if(q) q.onclick=function(e){
       e.stopPropagation();
       if(p.hasOptions){ send({type:"go", url:p.url}); return; }
-      q.textContent="Adding…"; q.disabled=true; lastBtn=q; send({type:"add", productId:p.id, name:p.name});
+      q.textContent="Added to cart ✓"; q.style.background="var(--mint)"; q.disabled=true; lastBtn=q; send({type:"add", productId:p.id, name:p.name});
     };
   });
 }
@@ -233,8 +233,9 @@ window.addEventListener("message", function(e){
   var m=e.data; if(!m || typeof m!=="object") return;
   if(m.type==="data"){ DATA=m; LINKS=m.links||{}; renderHero(); renderCats(); renderTabs(); renderRail(); }
   if(m.type==="added" && lastBtn){
-    var b=lastBtn; b.textContent = m.ok ? "Added to cart ✓" : "Open product to add"; b.style.background = m.ok ? "var(--mint)" : "var(--blush)";
-    setTimeout(function(){ b.textContent="Quick add +"; b.style.background=""; b.disabled=false; }, 1800);
+    var b=lastBtn;
+    if(!m.ok){ b.textContent="Open product to add"; b.style.background="var(--blush)"; }
+    setTimeout(function(){ b.textContent="Quick add +"; b.style.background=""; b.disabled=false; }, m.ok ? 1200 : 2500);
   }
 });
 send({type:"ready"});
