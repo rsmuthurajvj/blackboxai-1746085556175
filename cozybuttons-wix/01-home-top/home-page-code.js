@@ -16,25 +16,25 @@ const FRAME = '#cozyHomeTop';
 // SETTINGS – the only part you should edit.
 // "collection" must match the category name in
 //   Dashboard → Catalog → Store Products → Categories   (spelling matters, case does not)
-// "url" = the page path. Find it by opening the site and clicking that menu item,
-//   then copying everything after the domain, e.g.  /clothing
+// Links are built automatically as  /category/<category-slug>  (the store's own
+// category pages). Add  url: '/something'  to a line only to override that.
 // ---------------------------------------------------------------------
 const SETTINGS = {
   badgeTop: "Winter '26",
 
   links: {
-    shopAll: '/all-products',   // CHECK: path of "ALL PRODUCTS" menu item
-    combo: '/combo-packs',      // CHECK: path of "COMBO PACKS" menu item
+    shopAll: '/category/all-products',
+    combo: { collection: 'Combo Packs' },   // link = that category's page
   },
 
-  // 6 round category buttons (photo = first product in that category)
+  // 6 round category buttons (photo = newest product in that category)
   categories: [
-    { label: 'Combo Packs',        sub: 'Save more',          collection: 'Combo Packs',        url: '/combo-packs' },
-    { label: 'Clothing',           sub: '0–4 years',          collection: 'Clothing',           url: '/clothing' },
-    { label: 'Bedding & Comfort',  sub: 'Sleep easy',         collection: 'Bedding & Comfort',  url: '/bedding-comfort' },
-    { label: 'Accessories',        sub: 'Caps, socks, mitts', collection: 'Accessories',        url: '/accessories' },
-    { label: 'Essentials',         sub: 'Bibs & burp cloths', collection: 'Essentials',         url: '/essentials' },
-    { label: 'Ethnic Wears',       sub: 'Festive-ready',      collection: 'Ethnic Wears',       url: '/ethnic-wears' },
+    { label: 'Combo Packs',        sub: 'Save more',           collection: 'Combo Packs' },
+    { label: 'Clothing',           sub: 'Jablas, frocks & more', collection: 'Clothing' },
+    { label: 'Bedding & Comfort',  sub: 'Carry beds, blankets', collection: 'Bedding & Comfort' },
+    { label: 'Accessories',        sub: 'Caps, mittens, socks', collection: 'Accessories' },
+    { label: 'Essentials',         sub: 'Nappies, bibs, towels', collection: 'Essentials' },
+    { label: 'Ethnic Wears',       sub: 'Festive-ready',       collection: 'Ethnic Wears' },
   ],
 
   // Product tabs. collection: null = newest products from the whole store.
@@ -77,17 +77,30 @@ function toCard(p) {
   };
 }
 
-let collectionIds = null;
-async function collectionId(name) {
+let collectionMap = null;
+async function findCollection(name) {
   if (!name) return null;
-  if (!collectionIds) {
-    collectionIds = {};
-    const res = await wixData.query('Stores/Collections').limit(100).find();
-    res.items.forEach(c => { collectionIds[c.name.trim().toLowerCase()] = c._id; });
+  if (!collectionMap) {
+    collectionMap = {};
+    const res = await wixData.query('Stores/Collections').limit(1000).find();
+    res.items.forEach(c => { collectionMap[c.name.trim().toLowerCase()] = c; });
   }
-  const id = collectionIds[name.trim().toLowerCase()];
-  if (!id) console.warn(`[CozyButtons] Category not found: "${name}". Check SETTINGS spelling.`);
-  return id || null;
+  const c = collectionMap[name.trim().toLowerCase()];
+  if (!c) console.warn(`[CozyButtons] Category not found: "${name}". Check SETTINGS spelling.`);
+  return c || null;
+}
+async function collectionId(name) {
+  const c = await findCollection(name);
+  return c ? c._id : null;
+}
+async function categoryUrl(name) {
+  const c = await findCollection(name);
+  return c && c.slug ? `/category/${c.slug}` : SETTINGS.links.shopAll;
+}
+async function resolveLink(link) {
+  if (typeof link === 'string') return link;
+  if (link && link.collection) return categoryUrl(link.collection);
+  return SETTINGS.links.shopAll;
 }
 
 async function products(collectionName, limit) {
@@ -106,14 +119,18 @@ async function buildData() {
     Promise.all(SETTINGS.tabs.map(async t => ({ label: t.label, items: await products(t.collection, SETTINGS.productsPerTab) }))),
     Promise.all(SETTINGS.categories.map(async c => {
       const first = await products(c.collection, 1);
-      return { label: c.label, sub: c.sub, url: c.url, img: first[0] ? imageUrl(first[0].media, 300, 300) : '' };
+      const url = c.url || await categoryUrl(c.collection);
+      return { label: c.label, sub: c.sub, url, img: first[0] ? imageUrl(first[0].media, 300, 300) : '' };
     })),
   ]);
   const newest = tabs[0] ? tabs[0].items : [];
   return {
     type: 'data',
     badgeTop: SETTINGS.badgeTop,
-    links: SETTINGS.links,
+    links: {
+      shopAll: await resolveLink(SETTINGS.links.shopAll),
+      combo: await resolveLink(SETTINGS.links.combo),
+    },
     hero: newest.slice(0, 3).map(p => ({ name: p.name, url: p.url, img: imageUrl(p.media, 600, 800) })),
     cats,
     tabs,

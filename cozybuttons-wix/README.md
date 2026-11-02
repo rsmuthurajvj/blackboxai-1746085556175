@@ -57,10 +57,8 @@ Set **ID** to `cozyHomeTop` and press Enter. Spelling and capitals must match ex
 2. Paste all of `home-page-code.js`.
 3. Press **Save** (top bar).
 
-### 7. Fill in the SETTINGS (the only part you edit)
-At the top of the code there is a `SETTINGS` block.
-- **`collection`**: must match the category names in **Dashboard → Catalog → Store Products → Categories**. Spelling matters; capitals don't.
-- **`url`**: the page each button opens. To find it, click **Test Site**, click that menu item (e.g. CLOTHING), and copy the part of the address after the domain (e.g. `/clothing`). Do this for each category, plus **ALL PRODUCTS** (`shopAll`) and **COMBO PACKS** (`combo`).
+### 7. Check the SETTINGS (usually no edits needed)
+At the top of the code there is a `SETTINGS` block. The `collection` names must match **Dashboard → Catalog → Store Products → Categories** (spelling matters; capitals don't). Links are built automatically from each category (`/category/<slug>`), so you don't need to look up menu links.
 
 ### 8. Test
 Click **Test Site** and check:
