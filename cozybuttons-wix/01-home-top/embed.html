@@ -103,21 +103,34 @@ a{color:inherit}
 @keyframes sh{to{background-position:-200% 0}}
 .empty{padding:2rem;text-align:center;color:var(--ink-soft);border:2px dashed var(--line);border-radius:20px}
 
-/* MOBILE (Wix mobile view is ~320–420px wide) */
+/* MOBILE (Wix mobile view is ~280–320px wide). Kept compact so the block needs no inner scroll. */
 @media (max-width:700px){
-  .wrap{padding:0 12px}
-  .hero{grid-template-columns:1fr;padding:28px 20px 24px;border-radius:24px;gap:10px}
-  .hero h1{font-size:2.15rem}
-  .lead{font-size:.98rem;margin:.7rem 0 1.1rem}
-  .meta{gap:.7rem;margin-top:1.1rem;font-size:.8rem}
-  .stack{height:270px}
-  .badge{width:90px;height:90px;font-size:.75rem}
-  .sec{padding-top:40px}
-  .head h2{font-size:1.65rem}
-  .cats{grid-template-columns:repeat(3,1fr);gap:16px 8px}
-  .disc{max-width:82px}
-  .cat b{font-size:.88rem}
-  .rail{grid-auto-columns:68%}
+  .wrap{padding:0 10px}
+  .hero{grid-template-columns:1fr;padding:22px 16px 18px;border-radius:22px;gap:6px}
+  .hero::before{inset:7px;border-radius:17px}
+  .hand{font-size:1.15rem;white-space:nowrap}
+  .hero h1{font-size:1.75rem}
+  .lead{font-size:.9rem;margin:.55rem 0 .9rem}
+  .btn{padding:.7rem 1.05rem;font-size:.88rem}
+  .cta{gap:.5rem}
+  .meta{gap:.35rem .8rem;margin-top:.9rem;font-size:.76rem}
+  .stack{height:220px;margin-top:8px}
+  .photo{width:50%}
+  .badge{width:78px;height:78px;font-size:.68rem}
+  .badge small{font-size:.55rem}
+  .sec{padding-top:30px}
+  .head{margin-bottom:14px;gap:.6rem}
+  .head h2{font-size:1.4rem}
+  .eyebrow{font-size:.68rem}
+  .cats{grid-template-columns:repeat(3,1fr);gap:12px 6px}
+  .disc{max-width:76px}
+  .cat b{font-size:.8rem}
+  .cat small{display:none}
+  .tabs{flex-wrap:nowrap;overflow-x:auto;width:100%;scrollbar-width:none;padding-bottom:2px}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{white-space:nowrap;font-size:.8rem;padding:.35rem .8rem}
+  .rail{grid-auto-columns:64%;gap:12px}
+  .name{font-size:.86rem}
   .arrow{display:none}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}

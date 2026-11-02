@@ -73,7 +73,7 @@ If something is empty, open the **Developer Console** (bottom of the Test Site w
 ### 9. Mobile layout
 1. Click the **phone icon** in the editor top bar.
 2. Select the HTML element. If it's hidden, use **Show on mobile**.
-3. Set **W: 320** (or as wide as the mobile page allows), **X: 0**, **H: 1800**.
+3. Set **W: 320**, **X: 0**, **H: 1600**.
 4. Drag any older mobile elements below it.
 5. Test on a real phone after publishing.
 
@@ -91,4 +91,4 @@ Don't connect the domain or move the Premium plan to this copy.
 - Products come from `wixData.query('Stores/Products')`. The category filter is `hasSome('collections', [id])`. Products are sorted newest first.
 - Products with options (size, colour) can't be added without choosing one, so **Choose size** opens the product page.
 - Text inside an Embed HTML element isn't indexed by Google. The product and category pages stay native, so product SEO is unaffected. Set the Home page SEO title and description in **Page Settings → SEO basics**.
-- Measured content height of the embed: 1364px at 980 wide and 1787px at 320 wide. The sizes above add a small margin. If you change the text, re-check the height so nothing is cut off.
+- Measured content height of the embed: 1364px at 980 wide and about 1475px at 280–320 wide (compact mobile layout). The sizes above add a small margin. If you change the text, re-check the height so nothing is cut off.
