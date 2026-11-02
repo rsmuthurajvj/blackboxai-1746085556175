@@ -25,12 +25,12 @@ const SETTINGS = {
 
   links: {
     shopAll: '/category/all-products',
-    combo: { collection: 'Combo Packs' },   // link = that category's page
+    combo: { collection: 'Kids Combo Pack' },   // link = that category's page
   },
 
   // 6 round category buttons (photo = newest product in that category)
   categories: [
-    { label: 'Combo Packs',        sub: 'Save more',           collection: 'Combo Packs' },
+    { label: 'Combo Packs',        sub: 'Save more',           collection: 'Kids Combo Pack' },
     { label: 'Clothing',           sub: 'Jablas, frocks & more', collection: 'Clothing' },
     { label: 'Bedding & Comfort',  sub: 'Carry beds, blankets', collection: 'Bedding & Comfort' },
     { label: 'Accessories',        sub: 'Caps, mittens, socks', collection: 'Accessories' },

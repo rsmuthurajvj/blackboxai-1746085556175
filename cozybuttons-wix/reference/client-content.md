@@ -15,6 +15,11 @@ Source: the old homepage Embed HTML `#html18` (earlier attempt), the footer and 
 - Same-day dispatch if ordered before **12 PM**. Delivery takes 2–4 days in Tamil Nadu and 4–7 days in other states.
 - **7-day returns / exchange** via WhatsApp photo
 
+## Real store category names (from the console, 2 Nov 2026)
+0-3 Month · 1-2 Year · 2-3 Years · 3-6 Month · 6-12 Month · Accessories · All Products · Bamboo muslin wipes · Bedding & Comfort · Beds · Bedsheet · Bib · Blankets · Boys · Burp Cloth · Button Jabla · Carry Bed · Carry Nest · Clothing · Co-Ord Set · Color Bib · Cotton Frock · Cotton Jabla · Cotton newborn frock · Cotton padded underwear · Cotton shoulder button frock · Cotton thottil · Crinkled Muslin Blanket · Crinkled muslin burp cloth · Crinkled muslin nappy · Crinkled muslin wipes · Dry feel Langots · Dry Sheets · Essentials · Ethnic Wears · Feeding Pillow · Frocks · full footed rompers · Full sleeve jabla with pant · Girls · Half sleeve jabla with shorts · Hooded Towels · Jabla Set · Jabla with Nappy Set · Jablas · Kapok Silk Bed · Kids Combo Pack · Kimono Jabla · Knot Jabla · Lunch Towel · Microfiber towels · Mitten & Socks · Moms towels · Mosquito Net Bed · Muslin Baby Quilt · Muslin Bib · Muslin Blankets · Muslin bottom frill frocks · Muslin burp cloth · Muslin Frock · Muslin half rompers · Muslin Hand frill frock · Muslin hooded towel · Muslin Knotting frock · Muslin nappy · Muslin Padded nappy · Muslin padded underwear · Muslin shoulder button frock · Muslin swaddle · Muslin towels · Muslin wipes · Muslin zip frocks · Nappy · Onesies · Padded underwear · Panties · Pure Cotton Blanket · Rompers · Sandwich Bib · Sleeping Bag · Sleeping Mattress · Sleeveless Jabla with shorts · Summer Sale · Swaddles · Thottil cloth · Thottil Net · Towels · Wipes
+
+The menu item "COMBO PACKS" most likely points to **Kids Combo Pack** (there is no "Combo Packs" category).
+
 ## Store URL pattern
 Category pages are `/category/<slug>`, e.g.:
 - All: `/category/all-products`
