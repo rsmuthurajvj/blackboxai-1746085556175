@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  COZY BUTTONS – FOOTER BLOCK
+  Paste into an Embed HTML element INSIDE THE FOOTER, ID  cozyFooter.
+  Links are opened by masterPage.js (it runs on every page).
+  The newsletter form stays a native Wix form, placed to the right of this block.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Figtree:wght@400;600;700&family=Caveat:wght@600&display=swap">
+<style>
+:root{--ink:#3d2418;--ink-soft:#7a5a4b;--linen:#fbf6ef;--butter:#ffd86b;--line:#ead9c8;--wa:#1fa855;
+  --f-display:"Fredoka","Trebuchet MS",system-ui,sans-serif;--f-body:"Figtree","Segoe UI",system-ui,sans-serif;--f-hand:"Caveat",cursive}
+*{box-sizing:border-box}
+html,body{margin:0;overflow:hidden;background:var(--linen);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+a,button{color:inherit;font:inherit}
+:focus-visible{outline:3px solid #e9b320;outline-offset:3px;border-radius:8px}
+.grid{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:28px;padding:8px 4px}
+.logo{font-family:var(--f-display);font-weight:600;font-size:1.6rem;line-height:.95;letter-spacing:.02em;margin:0 0 .5rem}
+.logo .o{display:inline-block;width:.74em;height:.74em;border-radius:50%;background:#b8663f;vertical-align:-.04em;box-shadow:inset 0 0 0 .14em #b8663f,inset 0 0 0 .2em var(--ink)}
+.hand{font-family:var(--f-hand);font-size:1.3rem;color:var(--ink-soft);margin:0 0 .8rem}
+h4{font-family:var(--f-display);font-weight:600;font-size:1.1rem;margin:0 0 .7rem}
+ul{list-style:none;margin:0;padding:0;display:grid;gap:.45rem}
+.lnk{background:none;border:0;padding:0;cursor:pointer;color:var(--ink-soft);text-align:left;position:relative}
+.lnk::after{content:"";position:absolute;left:0;right:100%;bottom:-2px;height:2px;background:var(--butter);transition:right .25s}
+.lnk:hover{color:var(--ink)}.lnk:hover::after{right:0}
+.contact{display:grid;gap:.35rem;color:var(--ink-soft);font-size:.92rem}
+.contact b{color:var(--ink);font-weight:700}
+.social{display:flex;gap:.5rem;margin-top:.9rem}
+.social a{width:38px;height:38px;border-radius:50%;background:#fff;border:2px solid var(--line);display:grid;place-items:center;transition:transform .25s,background .25s,border-color .25s}
+.social a:hover{transform:translateY(-3px) rotate(-8deg);background:var(--butter);border-color:var(--butter)}
+.social svg{width:18px;height:18px;fill:var(--ink)}
+.social a.wa{background:var(--wa);border-color:var(--wa)}.social a.wa svg{fill:#fff}
+.bottom{margin-top:22px;border-top:1px dashed var(--line);padding-top:12px;display:flex;justify-content:space-between;gap:.5rem;flex-wrap:wrap;font-size:.82rem;color:var(--ink-soft)}
+@media (max-width:600px){
+  html,body{font-size:14px}
+  .grid{grid-template-columns:1fr 1fr;gap:18px 14px}
+  .brand{grid-column:1/-1}
+  .bottom{margin-top:16px;flex-direction:column}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="brand">
+    <p class="logo">C<span class="o"></span>ZY<br>BUTT<span class="o"></span>NS</p>
+    <p class="hand">soft things, sewn with love in Karur</p>
+    <div class="contact">
+      <span>Karur, Tamil Nadu 639117</span>
+      <span>WhatsApp / call <b>+91 86374 31790</b></span>
+      <span><b>cozybuttons24@gmail.com</b></span>
+    </div>
+    <div class="social">
+      <a class="wa" href="https://wa.me/918637431790" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9 0-1.4.7-2 1-2.3.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .6l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.3.1.2.1.7-.1 1.3z"/></svg></a>
+      <a id="ig" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM17.5 5.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg></a>
+      <a id="fb" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H8v4h2v8h4v-8h3l1-4h-4V8z"/></svg></a>
+      <a id="yt" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M22 8.2a3 3 0 0 0-2.1-2.1C18 5.6 12 5.6 12 5.6s-6 0-7.9.5A3 3 0 0 0 2 8.2 31 31 0 0 0 1.6 12 31 31 0 0 0 2 15.8a3 3 0 0 0 2.1 2.1c1.9.5 7.9.5 7.9.5s6 0 7.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .4-3.8 31 31 0 0 0-.4-3.8zM10 15V9l5.2 3z"/></svg></a>
+    </div>
+  </div>
+  <div><h4>Shop</h4><ul id="shop"></ul></div>
+  <div><h4>Help</h4><ul id="help"></ul></div>
+</div>
+<div class="bottom"><span>© <span id="yr"></span> Cozy Buttons</span><span>Sewn with care in Karur, Tamil Nadu</span></div>
+
+<script>
+/* ===== EDIT LINKS HERE =====
+   Paths are the part after the site address. Check each one by clicking it on Test Site. */
+var LINKS = {
+  shop: [
+    ["Shop All", "/category/all-products"],
+    ["Combo Packs", "/category/kids-combo-pack"],
+    ["Clothing", "/category/clothing"],
+    ["Bedding & Comfort", "/category/bedding-comfort"],
+    ["Ethnic Wear", "/category/ethnic-wears"]
+  ],
+  help: [
+    ["Shipping & Returns", "/shipping-returns"],
+    ["Return & Refund Policy", "/return-refund-policy"],
+    ["Privacy Policy", "/privacy-policy"],
+    ["Terms & Conditions", "/terms-and-conditions"],
+    ["FAQ", "/faq"]
+  ],
+  instagram: "https://www.instagram.com/",   // CONFIRM: paste the client's profile links
+  facebook: "https://www.facebook.com/",
+  youtube: "https://www.youtube.com/"
+};
+/* ===== no changes needed below ===== */
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function list(id,items){
+  document.getElementById(id).innerHTML=items.map(function(l){return '<li><button class="lnk" data-u="'+esc(l[1])+'">'+esc(l[0])+'</button></li>';}).join("");
+}
+list("shop",LINKS.shop); list("help",LINKS.help);
+document.getElementById("ig").href=LINKS.instagram;
+document.getElementById("fb").href=LINKS.facebook;
+document.getElementById("yt").href=LINKS.youtube;
+document.getElementById("yr").textContent=new Date().getFullYear();
+document.querySelectorAll(".lnk").forEach(function(b){ b.onclick=function(){ window.parent.postMessage({type:"go",url:b.getAttribute("data-u")},"*"); }; });
+function fit(){var b=document.body;b.style.zoom=1;var h=document.documentElement.scrollHeight,H=window.innerHeight;if(H>100&&h>H+2)b.style.zoom=(H/h).toFixed(3);}
+window.addEventListener("load",fit);window.addEventListener("resize",fit);
+</script>
+</body>
+</html>
