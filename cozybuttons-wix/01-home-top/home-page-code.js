@@ -77,15 +77,28 @@ function toCard(p) {
   };
 }
 
-let collectionMap = null;
+let collectionMapPromise = null;
+function loadCollections() {
+  // Load the store's categories once; every caller waits for the same result.
+  if (!collectionMapPromise) {
+    collectionMapPromise = (async () => {
+      const map = {};
+      try {
+        const res = await wixData.query('Stores/Collections').limit(100).find();
+        res.items.forEach(c => { map[c.name.trim().toLowerCase()] = c; });
+        console.log('[CozyButtons] store categories:', res.items.map(c => c.name).join(' | '));
+      } catch (e) {
+        console.error('[CozyButtons] could not read store categories', e);
+      }
+      return map;
+    })();
+  }
+  return collectionMapPromise;
+}
 async function findCollection(name) {
   if (!name) return null;
-  if (!collectionMap) {
-    collectionMap = {};
-    const res = await wixData.query('Stores/Collections').limit(1000).find();
-    res.items.forEach(c => { collectionMap[c.name.trim().toLowerCase()] = c; });
-  }
-  const c = collectionMap[name.trim().toLowerCase()];
+  const map = await loadCollections();
+  const c = map[name.trim().toLowerCase()];
   if (!c) console.warn(`[CozyButtons] Category not found: "${name}". Check SETTINGS spelling.`);
   return c || null;
 }
@@ -103,15 +116,33 @@ async function resolveLink(link) {
   return SETTINGS.links.shopAll;
 }
 
-async function products(collectionName, limit) {
-  let q = wixData.query('Stores/Products').descending('_createdDate').limit(limit);
-  if (collectionName) {
-    const id = await collectionId(collectionName);
-    if (!id) return [];
-    q = q.hasSome('collections', [id]);
+async function runQuery(build) {
+  // Try newest-first; if this store does not allow that sort, fall back to default order.
+  try {
+    return (await build().descending('_createdDate').find()).items;
+  } catch (e) {
+    console.warn('[CozyButtons] sort not allowed, using default order', e);
+    return (await build().find()).items;
   }
-  const res = await q.find();
-  return res.items.map(toCard);
+}
+
+async function products(collectionName, limit) {
+  try {
+    let id = null;
+    if (collectionName) {
+      id = await collectionId(collectionName);
+      if (!id) return [];
+    }
+    const items = await runQuery(() => {
+      let q = wixData.query('Stores/Products').limit(limit);
+      if (id) q = q.hasSome('collections', [id]);
+      return q;
+    });
+    return items.map(toCard);
+  } catch (e) {
+    console.error(`[CozyButtons] products failed for "${collectionName || 'All'}"`, e);
+    return [];
+  }
 }
 
 async function buildData() {
@@ -138,15 +169,22 @@ async function buildData() {
 }
 
 $w.onReady(function () {
+  console.log('[CozyButtons] page code started');
   const frame = $w(FRAME);
   const dataPromise = buildData().catch(err => { console.error('[CozyButtons] load failed', err); return null; });
   // Send as soon as ready (in case the embed loaded first), and again when the embed says "ready".
-  dataPromise.then(data => { if (data) frame.postMessage(data); });
+  dataPromise.then(data => {
+    if (!data) return;
+    console.log('[CozyButtons] data ready:', data.tabs.map(t => `${t.label}=${t.items.length}`).join(', '),
+      '| categories with photo:', data.cats.filter(c => c.img).length);
+    frame.postMessage(data);
+  });
 
   frame.onMessage(async (event) => {
     const msg = event.data || {};
 
     if (msg.type === 'ready') {
+      console.log('[CozyButtons] embed is ready');
       const data = await dataPromise;
       if (data) frame.postMessage(data);
     }
