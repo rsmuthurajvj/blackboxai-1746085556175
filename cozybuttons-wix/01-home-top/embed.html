@@ -257,7 +257,6 @@ function fit(){
   var b=document.body; b.style.zoom=1;
   var h=document.documentElement.scrollHeight, H=window.innerHeight;
   if(H>200 && h>H+2){ b.style.zoom=(H/h).toFixed(3); }
-  console.log("[CozyFit] box", window.innerWidth+"x"+H, "content", h, "zoom", b.style.zoom, "after", document.documentElement.scrollHeight);
 }
 window.addEventListener("resize",fit);
 window.addEventListener("load",fit);
