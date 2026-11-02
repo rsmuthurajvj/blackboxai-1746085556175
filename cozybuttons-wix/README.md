@@ -8,7 +8,7 @@ Redesign of the cozybuttons.com homepage. It stays in **Wix**, and the store, ca
 
 | Step | Folder | Status |
 |---|---|---|
-| 1. Hero + category buttons + product tabs | `01-home-top/` | ready to install |
+| 1. Hero + category buttons + product tabs | `01-home-top/` | **done** (installed in Cozy Button Revamp, tested desktop + mobile) |
 | 2. Combo-pack builder, festive banner, trust badges, Instagram strip | `02-…` | next |
 | 3. Header / menu / footer restyle (native Wix settings) | `03-…` | later |
 
@@ -73,7 +73,7 @@ If something is empty, open the **Developer Console** (bottom of the Test Site w
 ### 9. Mobile layout
 1. Click the **phone icon** in the editor top bar.
 2. Select the HTML element. If it's hidden, use **Show on mobile**.
-3. Set **W: 320**, **X: 0**, **H: 1600**.
+3. Set **W: 320**, **X: 0**, **H: 1340**. Then set the section (`section1`) on mobile to block height + about 30 (≈ **1370**). If the content is ever taller than the box, the embed shrinks itself slightly to fit, so it never shows an inner scrollbar.
 4. Drag any older mobile elements below it.
 5. Test on a real phone after publishing.
 
