@@ -10,7 +10,7 @@ Redesign of the cozybuttons.com homepage. It stays in **Wix**, and the store, ca
 |---|---|---|
 | 1. Hero + category buttons + product tabs | `01-home-top/` | **done** (installed in Cozy Button Revamp, tested desktop + mobile) |
 | 2. Offer ribbon, shop by age + size finder, starter kit, made in Karur, FAQ, WhatsApp help | `02-home-more/` | ready to install |
-| 3. Header / menu / footer restyle (native Wix settings) | `03-…` | later |
+| 3. Header / menu / footer restyle (native Wix settings) | `03-header-footer.md` | ready |
 
 Design reference (prototype): https://claude.ai/artifact/UdoDoEfYGFMtTtYdeGtNB5
 
