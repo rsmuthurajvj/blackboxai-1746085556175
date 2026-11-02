@@ -21,7 +21,7 @@
   --f-hand:"Caveat","Comic Sans MS",cursive;
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;overflow-x:hidden}
+html,body{margin:0;overflow-y:hidden;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;overflow-x:hidden}
 h1,h2{font-family:var(--f-display);font-weight:600;line-height:1.08;margin:0;text-wrap:balance}
 button{font:inherit;color:inherit;cursor:pointer}
 a{color:inherit}
@@ -251,6 +251,16 @@ window.addEventListener("message", function(e){
     setTimeout(function(){ b.textContent="Quick add +"; b.style.background=""; b.disabled=false; }, m.ok ? 1200 : 2500);
   }
 });
+/* Safety net: if the content is taller than the Wix box, shrink it slightly
+   so it always fits without an inner scrollbar. */
+function fit(){
+  var b=document.body; b.style.zoom=1;
+  var h=document.documentElement.scrollHeight, H=window.innerHeight;
+  if(H>200 && h>H+2){ b.style.zoom=(H/h).toFixed(3); }
+}
+window.addEventListener("resize",fit);
+window.addEventListener("load",fit);
+new MutationObserver(function(){ clearTimeout(fit._t); fit._t=setTimeout(fit,150); }).observe(document.getElementById("rail"),{childList:true});
 send({type:"ready"});
 </script>
 </body>
