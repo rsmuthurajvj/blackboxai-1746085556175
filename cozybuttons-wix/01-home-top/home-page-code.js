@@ -21,6 +21,7 @@ const FRAME = '#cozyHomeTop';
 // ---------------------------------------------------------------------
 const SETTINGS = {
   badgeTop: "Winter '26",
+  heroCollection: 'Clothing',   // the 3 tilted hero photos come from this category (in-stock only)
 
   links: {
     shopAll: '/category/all-products',
@@ -95,11 +96,18 @@ function loadCollections() {
   }
   return collectionMapPromise;
 }
+function norm(t) { return String(t || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); }
 async function findCollection(name) {
   if (!name) return null;
   const map = await loadCollections();
-  const c = map[name.trim().toLowerCase()];
+  const want = norm(name);
+  const all = Object.values(map);
+  // 1) exact name  2) a name containing it  3) a name containing its first word (e.g. "Combo" -> "Kids Combo Pack")
+  const c = all.find(x => norm(x.name) === want)
+    || all.find(x => norm(x.name).includes(want) || want.includes(norm(x.name)))
+    || all.find(x => norm(x.name).split(' ').includes(want.split(' ')[0]));
   if (!c) console.warn(`[CozyButtons] Category not found: "${name}". Check SETTINGS spelling.`);
+  else if (norm(c.name) !== want) console.log(`[CozyButtons] "${name}" matched store category "${c.name}"`);
   return c || null;
 }
 async function collectionId(name) {
@@ -116,14 +124,23 @@ async function resolveLink(link) {
   return SETTINGS.links.shopAll;
 }
 
+// Newest first if the store allows it. Tries each sort once, then remembers what works.
+const SORTS = ['lastUpdated', null];
+let sortIndex = 0;
 async function runQuery(build) {
-  // Try newest-first; if this store does not allow that sort, fall back to default order.
-  try {
-    return (await build().descending('_createdDate').find()).items;
-  } catch (e) {
-    console.warn('[CozyButtons] sort not allowed, using default order', e);
-    return (await build().find()).items;
+  for (let i = sortIndex; i < SORTS.length; i++) {
+    const field = SORTS[i];
+    try {
+      const q = field ? build().descending(field) : build();
+      const items = (await q.find()).items;
+      if (sortIndex < i) sortIndex = i;
+      return items;
+    } catch (e) {
+      if (!field) throw e;
+      console.log(`[CozyButtons] sort by "${field}" not allowed, trying next`);
+    }
   }
+  return [];
 }
 
 async function products(collectionName, limit) {
@@ -133,12 +150,16 @@ async function products(collectionName, limit) {
       id = await collectionId(collectionName);
       if (!id) return [];
     }
+    // Fetch extra, then show in-stock products with a photo first.
     const items = await runQuery(() => {
-      let q = wixData.query('Stores/Products').limit(limit);
+      let q = wixData.query('Stores/Products').limit(Math.min(100, limit * 3));
       if (id) q = q.hasSome('collections', [id]);
       return q;
     });
-    return items.map(toCard);
+    const cards = items.map(toCard).filter(c => c.img);
+    const inStock = cards.filter(c => c.inStock);
+    const soldOut = cards.filter(c => !c.inStock);
+    return inStock.concat(soldOut).slice(0, limit);
   } catch (e) {
     console.error(`[CozyButtons] products failed for "${collectionName || 'All'}"`, e);
     return [];
@@ -154,7 +175,8 @@ async function buildData() {
       return { label: c.label, sub: c.sub, url, img: first[0] ? imageUrl(first[0].media, 300, 300) : '' };
     })),
   ]);
-  const newest = tabs[0] ? tabs[0].items : [];
+  const heroPool = SETTINGS.heroCollection ? await products(SETTINGS.heroCollection, 9) : [];
+  const newest = (heroPool.length >= 3 ? heroPool : (tabs[0] ? tabs[0].items : [])).filter(p => p.inStock);
   return {
     type: 'data',
     badgeTop: SETTINGS.badgeTop,
