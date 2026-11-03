@@ -124,10 +124,9 @@ async function categoryUrl(name) {
   const c = await findCollection(name);
   return c && c.slug ? `/category/${c.slug}` : SETTINGS.links.shopAll;
 }
-// Round photo for a category: the category's own image, else its first product's photo.
+// Round photo for a category: its newest in-stock product's photo.
 async function categoryImage(name) {
-  const c = await findCollection(name);
-  if (c && c.mainMedia) { const u = imageUrl(c.mainMedia, 300, 300); if (u) return u; }
+  // (Category images in this store are Wix's grey placeholder, so use a product photo.)
   const first = await products(name, 1);
   return first[0] ? imageUrl(first[0].media, 300, 300) : '';
 }
