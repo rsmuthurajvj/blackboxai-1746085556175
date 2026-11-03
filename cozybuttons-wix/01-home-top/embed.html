@@ -244,7 +244,7 @@ document.querySelectorAll("[data-go]").forEach(function(b){
 
 window.addEventListener("message", function(e){
   var m=e.data; if(!m || typeof m!=="object") return;
-  if(m.type==="data"){ DATA=m; LINKS=m.links||{}; renderHero(); renderCats(); renderTabs(); renderRail(); }
+  if(m.type==="data"){ DATA=m; LINKS=m.links||{}; renderHero(); renderCats(); renderTabs(); renderRail(); try{localStorage.setItem("cozyTop",JSON.stringify(m));}catch(x){} }
   if(m.type==="added" && lastBtn){
     var b=lastBtn;
     if(!m.ok){ b.textContent="Open product to add"; b.style.background="var(--blush)"; }
@@ -261,6 +261,8 @@ function fit(){
 window.addEventListener("resize",fit);
 window.addEventListener("load",fit);
 new MutationObserver(function(){ clearTimeout(fit._t); fit._t=setTimeout(fit,150); }).observe(document.getElementById("rail"),{childList:true});
+/* show the last data this visitor saw straight away; fresh data replaces it */
+try{ var cached=localStorage.getItem("cozyTop"); if(cached){ var m=JSON.parse(cached); DATA=m; LINKS=m.links||{}; renderHero(); renderCats(); renderTabs(); renderRail(); } }catch(x){}
 send({type:"ready"});
 </script>
 </body>

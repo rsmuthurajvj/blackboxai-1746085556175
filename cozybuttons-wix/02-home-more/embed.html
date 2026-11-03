@@ -355,7 +355,7 @@ function render(){
 
 window.addEventListener("message",function(e){
   var m=e.data; if(!m||typeof m!=="object") return;
-  if(m.type==="data"){ DATA=m; render(); }
+  if(m.type==="data"){ DATA=m; render(); try{localStorage.setItem("cozyMore",JSON.stringify(m));}catch(x){} }
   if(m.type==="added"){
     var b=$("#kitAdd");
     if(!m.ok){ b.textContent="Open the kit to add"; }
@@ -371,6 +371,8 @@ function fit(){
 }
 window.addEventListener("resize",fit);
 window.addEventListener("load",fit);
+/* show the last data this visitor saw straight away; fresh data replaces it */
+try{ var cached=localStorage.getItem("cozyMore"); if(cached){ var m=JSON.parse(cached); DATA=m; render(); } }catch(x){}
 send({type:"ready"});
 </script>
 </body>
